@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Take Off | Rock Band — Madison, WI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-section: #111111;
+  --bg-card: #1a1a1a;
+  --accent: #e53e3e;
+  --accent-glow: #ff4444;
+  --gold: #d4a853;
+  --text-primary: #f0ece4;
+  --text-muted: #8a8578;
+  --text-dim: #5a5650;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-heading: 'Oswald', sans-serif;
+  --font-body: 'Source Sans 3', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9999; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  padding: 1rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%);
+  transition: all 0.4s;
+}
+nav.scrolled {
+  background: rgba(10,10,10,0.97);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.75rem;
+  text-decoration: none;
+}
+.nav-logo img {
+  height: 45px; width: auto;
+  border-radius: 4px;
+}
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  color: var(--text-primary);
+}
+.nav-logo-text span { color: var(--accent); }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-family: var(--font-heading);
+  font-size: 0.75rem; font-weight: 400;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--text-muted); text-decoration: none;
+  position: relative; transition: color 0.3s;
+}
+.nav-links a::after {
+  content: ''; position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--accent); transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a:hover::after { width: 100%; }
+.hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 1001; }
+.hamburger span { display: block; width: 28px; height: 2px; background: var(--text-primary); transition: all 0.3s; }
+
+/* ===== HERO ===== */
+.hero {
+  height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/6b0d48f8-cc59-4160-a7d0-da7c255f5fae/p.jpg');
+  background-size: cover; background-position: center 20%;
+  filter: brightness(0.3) saturate(0.8);
+  transform: scale(1.05);
+  transition: transform 8s ease-out;
+}
+.hero:hover .hero-bg { transform: scale(1.0); }
+.hero::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.1) 40%,
+    rgba(10,10,10,0.6) 80%, rgba(10,10,10,1) 100%);
+}
+.hero-content {
+  text-align: center; position: relative; z-index: 2;
+  animation: hero-in 1.2s ease-out both;
+}
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-badge {
+  font-family: var(--font-heading);
+  font-size: 0.7rem; letter-spacing: 6px;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+}
+.hero-badge::before, .hero-badge::after {
+  content: ''; width: 40px; height: 1px; background: var(--accent); opacity: 0.4;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw, 11rem);
+  letter-spacing: 8px; line-height: 0.9;
+  color: #fff; text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+.hero-title em {
+  font-style: normal; color: transparent;
+  -webkit-text-stroke: 2px rgba(255,255,255,0.85);
+  display: block; font-size: 0.65em; letter-spacing: 12px;
+}
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: 1.15rem; font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  margin-top: 1.5rem; letter-spacing: 1px;
+}
+.hero-cta {
+  margin-top: 2.5rem;
+  display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap;
+}
+.hero-cta a {
+  font-family: var(--font-heading);
+  font-size: 0.8rem; letter-spacing: 3px;
+  text-transform: uppercase; padding: 1rem 2.5rem;
+  text-decoration: none; transition: all 0.35s;
+}
+.btn-primary { background: var(--accent); color: #fff; border: 2px solid var(--accent); }
+.btn-primary:hover { background: transparent; color: var(--accent); box-shadow: 0 0 30px rgba(229,62,62,0.2); }
+.btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.scroll-indicator {
+  position: absolute; bottom: 3rem; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-heading);
+  font-size: 0.65rem; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  writing-mode: vertical-rl; z-index: 2;
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+@keyframes scroll-bounce {
+  0%,100%{ transform:translateX(-50%) translateY(0); }
+  50%{ transform:translateX(-50%) translateY(10px); }
+}
+
+/* ===== SECTIONS ===== */
+section { padding: 7rem 3rem; position: relative; }
+.section-label {
+  font-family: var(--font-heading);
+  font-size: 0.7rem; letter-spacing: 5px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  letter-spacing: 3px; line-height: 1; margin-bottom: 2rem;
+}
+.section-divider {
+  width: 60px; height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin-bottom: 2.5rem;
+}
+
+/* ===== ABOUT ===== */
+.about { background: var(--bg-section); }
+.about-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.2fr 1fr;
+  gap: 5rem; align-items: start;
+}
+.about-hero-img {
+  width: 100%; aspect-ratio: 4/3; object-fit: cover;
+  margin-bottom: 2rem; filter: saturate(0.9);
+  transition: filter 0.5s;
+}
+.about-hero-img:hover { filter: saturate(1.1); }
+.about-text p {
+  font-size: 1.05rem; line-height: 1.85;
+  color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 300;
+}
+.about-text strong { color: var(--text-primary); font-weight: 600; }
+.about-highlight {
+  font-family: var(--font-display);
+  font-size: 2rem; letter-spacing: 2px;
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent);
+  padding-left: 1.5rem; margin: 2rem 0; line-height: 1.3;
+}
+.members-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+.member-card {
+  background: var(--bg-card);
+  display: grid; grid-template-columns: 70px 1fr;
+  gap: 1rem; align-items: center;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid transparent;
+  transition: all 0.35s; overflow: hidden;
+}
+.member-card:hover { border-left-color: var(--accent); transform: translateX(4px); background: #1e1e1e; }
+.member-photo {
+  width: 70px; height: 70px; border-radius: 50%;
+  object-fit: cover; filter: grayscale(0.3); transition: filter 0.4s;
+}
+.member-card:hover .member-photo { filter: grayscale(0); }
+.member-name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-primary);
+}
+.member-aka { font-size: 0.8rem; font-weight: 300; font-style: italic; color: var(--gold); }
+.member-role { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+/* ===== GALLERY ===== */
+.gallery { background: var(--bg-dark); padding: 5rem 0; overflow: hidden; }
+.gallery-header { padding: 0 3rem; margin-bottom: 2.5rem; }
+.gallery-scroll {
+  display: flex; gap: 1rem;
+  animation: gallery-slide 60s linear infinite;
+  width: max-content;
+}
+.gallery-scroll:hover { animation-play-state: paused; }
+.gallery-item {
+  flex-shrink: 0; width: 320px; height: 240px;
+  overflow: hidden; position: relative;
+}
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.8) brightness(0.9); transition: all 0.5s;
+}
+.gallery-item:hover img { filter: saturate(1) brightness(1); transform: scale(1.05); }
+@keyframes gallery-slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===== MUSIC ===== */
+.music { background: var(--bg-section); }
+.music-inner { max-width: 1200px; margin: 0 auto; }
+.releases-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem; margin-top: 1rem;
+}
+.release-card {
+  position: relative; overflow: hidden;
+  background: var(--bg-card); transition: transform 0.4s;
+  text-decoration: none; color: inherit; display: block;
+}
+.release-card:hover { transform: translateY(-6px); }
+.release-artwork { width: 100%; aspect-ratio: 1; overflow: hidden; position: relative; }
+.release-artwork img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+.release-card:hover .release-artwork img { transform: scale(1.08); }
+.release-artwork::after {
+  content: '▶'; position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0.8);
+  font-size: 1.5rem; color: #fff;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: all 0.35s;
+}
+.release-card:hover .release-artwork::after { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+.release-info { padding: 1.5rem; }
+.release-tag {
+  font-family: var(--font-heading);
+  font-size: 0.65rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+}
+.release-name {
+  font-family: var(--font-heading);
+  font-size: 1.2rem; font-weight: 600;
+  letter-spacing: 1px; color: var(--text-primary); margin-bottom: 0.5rem;
+}
+.release-desc {
+  font-size: 0.85rem; color: var(--text-muted);
+  font-weight: 300; line-height: 1.5; margin-bottom: 1rem;
+}
+.release-link {
+  font-family: var(--font-heading);
+  font-size: 0.7rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--gold);
+  text-decoration: none; transition: color 0.3s;
+}
+.release-link:hover { color: var(--accent); }
+
+/* ===== SHOWS ===== */
+.shows { background: var(--bg-dark); }
+.shows-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.5fr;
+  gap: 4rem; align-items: start;
+}
+.shows-image { width: 100%; aspect-ratio: 3/4; object-fit: cover; filter: saturate(0.85); }
+.show-item {
+  display: grid; grid-template-columns: 110px 1fr auto;
+  gap: 1.5rem; align-items: center;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: all 0.3s;
+}
+.show-item:hover {
+  padding-left: 0.75rem;
+  background: linear-gradient(90deg, rgba(229,62,62,0.03) 0%, transparent 40%);
+}
+.show-date {
+  font-family: var(--font-display);
+  font-size: 1.4rem; letter-spacing: 2px;
+  color: var(--text-primary); line-height: 1.2;
+}
+.show-date span {
+  display: block; font-family: var(--font-heading);
+  font-size: 0.6rem; letter-spacing: 3px;
+  color: var(--text-dim); text-transform: uppercase;
+}
+.show-venue {
+  font-family: var(--font-heading);
+  font-size: 0.95rem; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--text-primary);
+}
+.show-location { font-size: 0.82rem; color: var(--text-muted); font-weight: 300; margin-top: 0.2rem; }
+.show-with { font-size: 0.78rem; color: var(--gold); font-style: italic; margin-top: 0.2rem; }
+.show-badge {
+  font-family: var(--font-heading);
+  font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase;
+  padding: 0.45rem 1rem; border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-muted); text-decoration: none;
+  transition: all 0.3s; white-space: nowrap;
+}
+.show-badge:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== NEWS ===== */
+.news { background: var(--bg-section); }
+.news-inner { max-width: 1100px; margin: 0 auto; }
+.news-feature {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3rem; margin-bottom: 3rem;
+}
+.news-feature-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: saturate(0.85); }
+.news-block h3 {
+  font-family: var(--font-heading);
+  font-size: 1.3rem; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-primary); margin-bottom: 1.25rem;
+}
+.news-block p {
+  font-size: 0.95rem; line-height: 1.85;
+  color: var(--text-muted); font-weight: 300; margin-bottom: 1rem;
+}
+.news-block p strong { color: var(--text-primary); }
+.nashville-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem; margin-top: 2rem;
+}
+.nashville-grid img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  filter: saturate(0.8) brightness(0.9);
+  transition: all 0.4s; cursor: pointer;
+}
+.nashville-grid img:hover { filter: saturate(1) brightness(1); transform: scale(1.03); }
+.news-extra {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2rem; margin-top: 3rem; padding-top: 3rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.news-card { background: var(--bg-card); overflow: hidden; transition: transform 0.3s; }
+.news-card:hover { transform: translateY(-4px); }
+.news-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; object-position: center; filter: saturate(0.8); }
+.news-card-body { padding: 1.5rem; }
+.news-card-body h4 {
+  font-family: var(--font-heading);
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-primary); margin-bottom: 0.75rem;
+}
+.news-card-body p { font-size: 0.85rem; line-height: 1.7; color: var(--text-muted); font-weight: 300; }
+.news-card-body a {
+  display: inline-block; margin-top: 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); text-decoration: none; transition: color 0.3s;
+}
+.news-card-body a:hover { color: var(--accent); }
+
+/* ===== CTA ===== */
+.cta-band {
+  position: relative; overflow: hidden; padding: 0; height: 400px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cta-bg {
+  position: absolute; inset: 0;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1656459596102-ERXB8ZT0O7FI67CG2MXP/22June_PTOLuckys_1415.jpg');
+  background-size: cover; background-position: center;
+  filter: brightness(0.25) saturate(0.7);
+}
+.cta-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(229,62,62,0.4) 0%, rgba(10,10,10,0.7) 100%);
+}
+.cta-content { position: relative; z-index: 2; text-align: center; }
+.cta-content h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: 4px; color: #fff; margin-bottom: 1rem;
+}
+.cta-content p { color: rgba(255,255,255,0.8); font-weight: 300; font-size: 1.1rem; margin-bottom: 2rem; }
+.cta-content a {
+  font-family: var(--font-heading);
+  font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;
+  padding: 1rem 2.5rem; background: #fff; color: var(--accent);
+  text-decoration: none; border: 2px solid #fff; transition: all 0.35s;
+}
+.cta-content a:hover { background: transparent; color: #fff; }
+
+/* ===== CONTACT ===== */
+.contact { background: var(--bg-dark); }
+.contact-inner { max-width: 900px; margin: 0 auto; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 1rem; }
+.contact-info h3 {
+  font-family: var(--font-heading);
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-primary); margin-bottom: 1.5rem;
+}
+.contact-item { margin-bottom: 2rem; }
+.contact-item .label {
+  font-family: var(--font-heading);
+  font-size: 0.65rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.4rem;
+}
+.contact-item a, .contact-item p {
+  font-size: 1.05rem; color: var(--text-primary);
+  text-decoration: none; font-weight: 300; transition: color 0.3s;
+}
+.contact-item a:hover { color: var(--accent); }
+.contact-form h3 {
+  font-family: var(--font-heading);
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-primary); margin-bottom: 1.5rem;
+}
+.contact-form input, .contact-form textarea {
+  width: 100%; padding: 0.9rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  font-family: var(--font-body); font-size: 0.9rem;
+  margin-bottom: 1rem; transition: border-color 0.3s; outline: none;
+}
+.contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); }
+.contact-form textarea { min-height: 120px; resize: vertical; }
+.contact-form button {
+  font-family: var(--font-heading);
+  font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;
+  padding: 1rem 2.5rem; background: var(--accent); color: #fff;
+  border: 2px solid var(--accent); cursor: pointer; transition: all 0.35s;
+}
+.contact-form button:hover { background: transparent; color: var(--accent); }
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--bg-section);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  padding: 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-logo { display: flex; align-items: center; gap: 0.5rem; }
+.footer-logo img { height: 35px; border-radius: 3px; }
+.footer-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.3rem; letter-spacing: 3px; color: var(--text-primary);
+}
+.footer-logo-text span { color: var(--accent); }
+footer .copy { font-size: 0.8rem; color: var(--text-dim); font-weight: 300; }
+.footer-social { display: flex; gap: 1.5rem; }
+.footer-social a {
+  font-family: var(--font-heading);
+  font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-muted); text-decoration: none; transition: color 0.3s;
+}
+.footer-social a:hover { color: var(--accent); }
+
+/* ===== ANIMATIONS ===== */
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1000px) {
+  .releases-grid { grid-template-columns: 1fr 1fr; }
+  .shows-inner { grid-template-columns: 1fr; }
+  .shows-image { display: none; }
+  .news-feature { grid-template-columns: 1fr; }
+  .nashville-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100vh;
+    background: rgba(10,10,10,0.98);
+    justify-content: center; align-items: center;
+    gap: 2rem; z-index: 1000;
+  }
+  .nav-links.open a { font-size: 1.2rem; letter-spacing: 4px; color: var(--text-primary); }
+  section { padding: 5rem 1.5rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .releases-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .show-item { grid-template-columns: 90px 1fr; gap: 1rem; }
+  .show-badge { display: none; }
+  .news-extra { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  .nashville-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-item { width: 250px; height: 190px; }
+}
+@media (max-width: 500px) {
+  .hero-title { letter-spacing: 3px; }
+  .hero-title em { letter-spacing: 5px; }
+  .hero-cta { flex-direction: column; align-items: center; }
+  .hero-cta a { width: 100%; text-align: center; }
+  .member-card { grid-template-columns: 55px 1fr; }
+  .member-photo { width: 55px; height: 55px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/da45f52e-6643-452d-84d5-fd16e45a730f/Screenshot_20250215_074549_Drive.JPG?format=300w" alt="PTO Logo">
+    <div class="nav-logo-text"><span>P</span>TO</div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home" onclick="closeNav()">Home</a></li>
+    <li><a href="#about" onclick="closeNav()">About</a></li>
+    <li><a href="#music" onclick="closeNav()">Music</a></li>
+    <li><a href="#shows" onclick="closeNav()">Live Shows</a></li>
+    <li><a href="#news" onclick="closeNav()">News</a></li>
+    <li><a href="#contact" onclick="closeNav()">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Madison, WI</div>
+    <h1 class="hero-title">POWER<em>TAKE OFF</em></h1>
+    <p class="hero-sub">Father and son. Loud and proud. Bringing the noise — one stage at a time.</p>
+    <div class="hero-cta">
+      <a href="#shows" class="btn-primary">Upcoming Shows</a>
+      <a href="#music" class="btn-outline">Listen Now</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <div class="section-label">The Band</div>
+      <h2 class="section-title">ABOUT PTO</h2>
+      <div class="section-divider"></div>
+      <img class="about-hero-img" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/ace76997-e03d-41fd-87a0-7488ab74ef01/pto+fence.jpg" alt="PTO Band at fence">
+      <p>We're not your average rock band — we're a <strong>father and son</strong> sharing the stage and a love for music.</p>
+      <p>Led by dynamic frontman <strong>Scott Theis ("Scotty")</strong> and his son <strong>Ayden ("Slim")</strong> on drums, we deliver a high-energy mix of originals and covers that hit hard and keep the crowd moving. Scotty & Slim trade off on drums and vocals, and every member sings, so no two sets are ever the same.</p>
+      <div class="about-highlight">TWO GENERATIONS. ONE STAGE. ALL ROCK.</div>
+      <p>Rounding out the lineup are <strong>Ethan Schluter ("Hank")</strong> and <strong>Mikey Delp ("Cowboy")</strong> on guitars, with <strong>Jakob Ripp ("JR")</strong> holding down the low end on bass — together, we create a live show that brings rock lovers of all ages together.</p>
+    </div>
+    <div class="fade-in" style="transition-delay: 0.2s;">
+      <div class="section-label" style="margin-bottom: 1.5rem;">The Lineup</div>
+      <div class="members-grid">
+        <div class="member-card">
+          <img class="member-photo" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649255066938-R7PHI3EM3FYR45HA8PMK/Screen%2BShot%2B2022-04-06%2Bat%2B9.19.39%2BAM.jpg" alt="Scotty">
+          <div>
+            <div class="member-name">Scott Theis</div>
+            <div class="member-aka">"Scotty"</div>
+            <div class="member-role">Vocals · Drums · Frontman</div>
+          </div>
+        </div>
+        <div class="member-card">
+          <img class="member-photo" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649255257279-8HA0NNRLPXWVEGK3IRZT/Screen%2BShot%2B2022-04-06%2Bat%2B9.13.05%2BAM.jpg" alt="Slim">
+          <div>
+            <div class="member-name">Ayden Theis</div>
+            <div class="member-aka">"Slim"</div>
+            <div class="member-role">Drums · Vocals</div>
+          </div>
+        </div>
+        <div class="member-card">
+          <img class="member-photo" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649219607936-PT9I8W8ABDTVWTTN89I5/_V2A1261.jpg" alt="Hank">
+          <div>
+            <div class="member-name">Ethan Schluter</div>
+            <div class="member-aka">"Hank"</div>
+            <div class="member-role">Guitar · Vocals</div>
+          </div>
+        </div>
+        <div class="member-card">
+          <img class="member-photo" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649219763385-RXVNLF3RAIYYU7TTHIR6/_DSC5560.jpg" alt="Cowboy">
+          <div>
+            <div class="member-name">Mikey Delp</div>
+            <div class="member-aka">"Cowboy"</div>
+            <div class="member-role">Guitar · Vocals</div>
+          </div>
+        </div>
+        <div class="member-card">
+          <img class="member-photo" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/10a09f8d-ae95-4fa3-b9c4-265bad23ffe6/jakob.jpg" alt="JR">
+          <div>
+            <div class="member-name">Jakob Ripp</div>
+            <div class="member-aka">"JR"</div>
+            <div class="member-role">Bass · Vocals</div>
+          </div>
+        </div>
+      </div>
+      <img style="width:100%; margin-top:1.5rem; aspect-ratio:16/9; object-fit:cover; filter:saturate(0.85);"
+           src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/e30821ab-70ba-494b-9fb0-fbdd4e0680aa/22March_PTOBand_018.jpeg" alt="PTO Band">
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+  <div class="gallery-header">
+    <div class="section-label fade-in">Gallery</div>
+    <h2 class="section-title fade-in">PTO PROUD</h2>
+  </div>
+  <div class="gallery-scroll">
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/63d6aef2-52e9-468c-bd19-111f8d56f420/22June_PTOLuckys_529.jpg" alt="PTO Live"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1740271873859-UYBYV5ZAVXYATJBLAJDE/_DSC5574.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/b2bbe4e6-afd3-4555-80b4-727728cce81e/IMG_8317.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/888a60b8-87c0-4bcb-8a81-5b77e494f3dd/Screenshot+2023-04-30+at+7_35_31+PM.png" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/a9b149d5-952e-4bb2-b6c4-99079d17564c/IMG_7812.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/65d53dfd-2ca5-4ff2-8604-06f5ec6f6f7c/IMG_7806.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/769ebdf8-9b3b-46ff-b2aa-157fe8e66d47/22March_PTOBand_044.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/f55c86f8-81ce-4c39-9578-4cf2dd760fbf/Screenshot+2023-03-15+at+5_25_38+PM.png" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/0762cbe2-a614-48da-b141-3cb0a7b37049/DSC_0995.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/05904aa3-148b-4457-ac07-cbdc0a0f4b37/IMG_9788.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1740271708915-MZ4DJGJABQW4VO5BS3NN/IMG_6695.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/078cfeb9-0186-4d7b-99cd-5e15dce02a97/Screenshot+2023-04-30+at+7_49_10+PM.png" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/6f9c0864-1903-45b5-b0eb-0ba4ce3fe722/20230318_235348.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649225286241-H67DO1I4I57KHPFSU2J1/_V2A1250.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/74e678b5-39c3-42f4-9861-3aeb7b9f4182/282666372_416210173847956_3020749543807933671_n.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/055bacb3-3259-4812-86ad-8ed36c056bf2/IMG_8322.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649222424380-CEK1YEAMFIGOI3PK903W/PTO_2.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/349297f8-bf5d-4233-a7f4-c2e68ffdf072/Screen+Shot+2022-09-29+at+4_49_09+PM.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/3ca124ea-6c18-47a2-8622-d4e93a301dca/DSC_0997.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/f99d400a-43df-4326-bc9a-37b9f45f06c2/277803319_833284580961932_7190022692127876904_n.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/cfcbf355-3067-46f5-a648-38f6350c4354/_MG_7521.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/80928fc9-cefe-41b5-b2e6-89d67b2a3266/IMG_6694.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/780126f2-9b33-4362-96cb-a654ce13d4e9/IMG_1415.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/d9d45e8f-ba52-4a92-9fee-7bbab2edd157/IMG_6692.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1740342741928-JZZ39ZCSLX4MQ1TCZBX1/IMG_0187.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/483f6614-c77a-482f-ae3a-64d6c00e2ae0/IMG_0186.jpg" alt="PTO"></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/63d6aef2-52e9-468c-bd19-111f8d56f420/22June_PTOLuckys_529.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1740271873859-UYBYV5ZAVXYATJBLAJDE/_DSC5574.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/b2bbe4e6-afd3-4555-80b4-727728cce81e/IMG_8317.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/888a60b8-87c0-4bcb-8a81-5b77e494f3dd/Screenshot+2023-04-30+at+7_35_31+PM.png" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/a9b149d5-952e-4bb2-b6c4-99079d17564c/IMG_7812.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/65d53dfd-2ca5-4ff2-8604-06f5ec6f6f7c/IMG_7806.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/769ebdf8-9b3b-46ff-b2aa-157fe8e66d47/22March_PTOBand_044.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/f55c86f8-81ce-4c39-9578-4cf2dd760fbf/Screenshot+2023-03-15+at+5_25_38+PM.png" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/0762cbe2-a614-48da-b141-3cb0a7b37049/DSC_0995.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/05904aa3-148b-4457-ac07-cbdc0a0f4b37/IMG_9788.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1740271708915-MZ4DJGJABQW4VO5BS3NN/IMG_6695.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/078cfeb9-0186-4d7b-99cd-5e15dce02a97/Screenshot+2023-04-30+at+7_49_10+PM.png" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/6f9c0864-1903-45b5-b0eb-0ba4ce3fe722/20230318_235348.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649225286241-H67DO1I4I57KHPFSU2J1/_V2A1250.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/74e678b5-39c3-42f4-9861-3aeb7b9f4182/282666372_416210173847956_3020749543807933671_n.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/055bacb3-3259-4812-86ad-8ed36c056bf2/IMG_8322.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1649222424380-CEK1YEAMFIGOI3PK903W/PTO_2.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/349297f8-bf5d-4233-a7f4-c2e68ffdf072/Screen+Shot+2022-09-29+at+4_49_09+PM.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/3ca124ea-6c18-47a2-8622-d4e93a301dca/DSC_0997.jpeg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/f99d400a-43df-4326-bc9a-37b9f45f06c2/277803319_833284580961932_7190022692127876904_n.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/cfcbf355-3067-46f5-a648-38f6350c4354/_MG_7521.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/80928fc9-cefe-41b5-b2e6-89d67b2a3266/IMG_6694.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/780126f2-9b33-4362-96cb-a654ce13d4e9/IMG_1415.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/d9d45e8f-ba52-4a92-9fee-7bbab2edd157/IMG_6692.JPG" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1740342741928-JZZ39ZCSLX4MQ1TCZBX1/IMG_0187.jpg" alt="PTO"></div>
+    <div class="gallery-item"><img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/483f6614-c77a-482f-ae3a-64d6c00e2ae0/IMG_0186.jpg" alt="PTO"></div>
+  </div>
+</section>
+
+<!-- MUSIC -->
+<section class="music" id="music">
+  <div class="music-inner">
+    <div class="fade-in">
+      <div class="section-label">Listen</div>
+      <h2 class="section-title">OUR MUSIC</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="releases-grid">
+      <a href="https://www.youtube.com/watch?v=VjuZHQRLfm8" target="_blank" class="release-card fade-in">
+        <div class="release-artwork">
+          <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/ab160983-7e0c-45ea-8ab8-2c577fc99e92/do+you+wanna.jpg" alt="Do You Wanna">
+        </div>
+        <div class="release-info">
+          <div class="release-tag">Single · Stryker Records</div>
+          <div class="release-name">Do You Wanna</div>
+          <div class="release-desc">Our latest single, out now on Stryker Records.</div>
+          <span class="release-link">Listen →</span>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=wmT9BEcq7fE" target="_blank" class="release-card fade-in" style="transition-delay:0.15s;">
+        <div class="release-artwork">
+          <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/28a1b364-3664-40c1-92f8-ac4256a5a6d1/IMG_7349.jpg" alt="All The No's">
+        </div>
+        <div class="release-info">
+          <div class="release-tag">Original Single</div>
+          <div class="release-name">All The No's</div>
+          <div class="release-desc">Raw, honest, and built for the stage.</div>
+          <span class="release-link">Listen →</span>
+        </div>
+      </a>
+      <a href="https://open.spotify.com/album/32yEDmoPudFu034XJYl8DJ" target="_blank" class="release-card fade-in" style="transition-delay:0.3s;">
+        <div class="release-artwork">
+          <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/3b682d6e-ca5a-4db2-a888-db97eb45a3f2/pto.JPG" alt="PTO EP">
+        </div>
+        <div class="release-info">
+          <div class="release-tag">EP · Spotify</div>
+          <div class="release-name">Power Take Off EP</div>
+          <div class="release-desc">Our debut EP — stream it now.</div>
+          <span class="release-link">Stream →</span>
+        </div>
+      </a>
+    </div>
+    <p style="text-align:center; margin-top:3rem; font-size:0.85rem; color:var(--text-dim); font-weight:300;">
+      New 5-song EP recorded at Stoner Creek Studios in Nashville — produced by Malcolm Springer. Coming soon.
+    </p>
+    <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; color:var(--text-dim); font-weight:300;">
+      Special thanks to <a href="https://guitarshopofwisconsin.com" target="_blank" style="color:var(--gold); text-decoration:none;">Greg's Guitar Shop</a>, John Pluska, <a href="https://www.giraffeboyproductions.com" target="_blank" style="color:var(--gold); text-decoration:none;">Chris Klinge Photography</a>, Michael Alexander Management, Chris & Jane Dobry — Stryker Records, and the PTO family.
+    </p>
+  </div>
+</section>
+
+<!-- LIVE SHOWS -->
+<section class="shows" id="shows">
+  <div class="shows-inner">
+    <img class="shows-image fade-in" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/c74a0312-4438-4b19-903e-934831e6086a/ptosite.jpeg" alt="PTO Live">
+    <div>
+      <div class="fade-in">
+        <div class="section-label">On The Road</div>
+        <h2 class="section-title">LIVE SHOWS</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="shows-list fade-in" style="transition-delay:0.15s;">
+        <div class="show-item">
+          <div class="show-date">MAR 6<span>Friday · 7PM</span></div>
+          <div>
+            <div class="show-venue">The Windsor</div>
+            <div class="show-location">Deforest, WI</div>
+            <div class="show-with">w/ The Cattlemen & Donny Bakken Band</div>
+          </div>
+          <a class="show-badge" href="#contact">RSVP</a>
+        </div>
+        <div class="show-item">
+          <div class="show-date">MAR 14<span>Saturday · 7-11PM</span></div>
+          <div>
+            <div class="show-venue">Mainstreet</div>
+            <div class="show-location">Brooklyn, WI</div>
+            <div class="show-with">w/ The Cattlemen & Donny Bakken Band</div>
+          </div>
+          <a class="show-badge" href="#contact">RSVP</a>
+        </div>
+        <div class="show-item">
+          <div class="show-date">MAR 28<span>Saturday · 7-11PM</span></div>
+          <div>
+            <div class="show-venue">Red Mouse</div>
+            <div class="show-location">Cross Plains, WI</div>
+            <div class="show-with">w/ The Cattlemen & Donny Bakken Band</div>
+          </div>
+          <a class="show-badge" href="#contact">RSVP</a>
+        </div>
+      </div>
+      <p style="margin-top:2.5rem; font-size:0.85rem; color:var(--text-dim); font-weight:300;">
+        For booking, <a href="#contact" style="color:var(--gold); text-decoration:none;">reach out to us</a>. We tour nationally.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="news" id="news">
+  <div class="news-inner">
+    <div class="fade-in">
+      <div class="section-label">Latest</div>
+      <h2 class="section-title">NEWS</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="news-feature fade-in">
+      <img class="news-feature-img" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/936262fb-fac4-4a4f-9925-d8d65ab00a93/PTO+Band+photo.jpg" alt="PTO Nashville">
+      <div class="news-block">
+        <h3>Nashville Recording Trip</h3>
+        <p>This February, PTO headed to Nashville and spent long days at <strong>Stoner Creek Studios</strong> — owned by Peter Keys of Lynyrd Skynyrd — recording our upcoming 5-song EP.</p>
+        <p>Produced by <strong>Malcolm Springer</strong>, the EP also features killer keyboard tracks from Jakob's dad, Jim Ripp. We had amazing visitors — <strong>Peter Keys</strong>, <strong>Chris & Jane Dobry</strong> (Stryker Records), <strong>Scotty Austin</strong>, and the <strong>Major Label Entertainment</strong> crew.</p>
+        <p>Between Gibson Guitars, Third Man Records, vintage stores, Broadway, house jams, and a fierce game of Candyland — it was unforgettable.</p>
+      </div>
+    </div>
+    <div class="nashville-grid fade-in">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/bf8d7faa-a5de-4936-bbd1-4f3a9493fd8e/nash.JPG" alt="Nashville">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/fd9d10a2-8fe3-4f8a-a687-646abefb3148/IMG_0108.JPG" alt="Studio">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/0b979198-db8b-4ec2-bf67-19fa238ee76a/nash2.JPG" alt="Nashville">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/ff29b1e0-b00a-4b78-99f5-5c78204fa7e3/IMG_0209.jpg" alt="Nashville">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/916097b2-414b-4742-a2ca-1134f00066d8/nash3.jpg" alt="Nashville">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/0cc4bf1a-66f5-497c-b683-a49cedf12637/nash4.JPG" alt="Nashville">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/cef4e1b5-3f5d-459d-a121-146121cf7a33/nash5.JPG" alt="Nashville">
+      <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1790f3ba-20b9-4134-b087-c90a00a697c0/nash7.jpg" alt="Nashville">
+    </div>
+    <div class="news-extra fade-in">
+      <div class="news-card">
+        <img class="news-card-img" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/1e6f0b9e-15d4-4b68-a361-060eb1676e0d/336252040_6468135943220846_3069260577417355186_n.jpg" alt="4-H Donation">
+        <div class="news-card-body">
+          <h4>Keep Truckin' Supports WI 4-H</h4>
+          <p>With your downloads of "Keep Truckin'," PTO donated $500 to the Wisconsin 4-H Foundation — supporting arts & communication programs for youth.</p>
+          <a href="https://music.apple.com/us/album/keep-truckin/1613531261?i=1613531396" target="_blank">Download Keep Truckin' →</a>
+        </div>
+      </div>
+      <div class="news-card">
+        <img class="news-card-img" src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/5b3fa1b6-a6a3-46e4-8d8a-9b87d6df460c/Screen+Shot+2022-10-29+at+1_58_16+PM.png" alt="Vega Award">
+        <div class="news-card-body">
+          <h4>Vega Award Winner</h4>
+          <p>The "Keep Truckin'" music video by Marv Turner / Yellow Dog Productions was recognized as Best Video of 2022 by the International Vega Awards.</p>
+          <a href="https://vegaawards.com/winner-info.php?id=44881" target="_blank">View Award →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <h2>READY TO ROCK?</h2>
+    <p>Book PTO for your next event, venue, or festival.</p>
+    <a href="#contact">Get In Touch</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="fade-in">
+      <div class="section-label">Book Us</div>
+      <h2 class="section-title">CONTACT</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info fade-in">
+        <h3>Get In Touch</h3>
+        <div class="contact-item">
+          <div class="label">Booking Email</div>
+          <a href="mailto:ptobooking@gmail.com">ptobooking@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <div class="label">Phone</div>
+          <a href="tel:6088435789">608.843.5789</a>
+        </div>
+        <div class="contact-item">
+          <div class="label">Management</div>
+          <p style="color:var(--text-primary);">Chris Dobry — Stryker Records</p>
+          <a href="mailto:cdobry@strykerrecords.com" style="font-size:0.9rem;">cdobry@strykerrecords.com</a>
+        </div>
+        <div class="contact-item">
+          <div class="label">Social</div>
+          <a href="https://www.facebook.com/profile.php?id=61580616332233" target="_blank">Facebook →</a>
+        </div>
+      </div>
+      <div class="contact-form fade-in" style="transition-delay:0.15s;">
+        <h3>Send a Message</h3>
+        <input type="text" placeholder="Your Name *">
+        <input type="email" placeholder="Email Address *">
+        <input type="text" placeholder="Subject">
+        <textarea placeholder="Tell us about your event or project..."></textarea>
+        <button type="button">Send Message</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="https://images.squarespace-cdn.com/content/v1/62250c6f410b9d5d02b6a0ca/da45f52e-6643-452d-84d5-fd16e45a730f/Screenshot_20250215_074549_Drive.JPG?format=100w" alt="PTO">
+    <div class="footer-logo-text"><span>P</span>TO</div>
+  </div>
+  <p class="copy">© 2026 Power Take Off · Madison, WI</p>
+  <div class="footer-social">
+    <a href="https://www.facebook.com/profile.php?id=61580616332233" target="_blank">Facebook</a>
+    <a href="https://open.spotify.com/album/32yEDmoPudFu034XJYl8DJ" target="_blank">Spotify</a>
+    <a href="https://www.youtube.com/watch?v=VjuZHQRLfm8" target="_blank">YouTube</a>
+  </div>
+</footer>
+
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+function closeNav() { document.getElementById('navLinks').classList.remove('open'); }
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
